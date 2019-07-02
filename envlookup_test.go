@@ -1,11 +1,12 @@
 package envlookup_test
 
 import (
-	"envlookup"
 	"os"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/spider-pigs/envlookup"
 )
 
 func TestMain(m *testing.M) {

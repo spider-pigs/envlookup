@@ -1,5 +1,7 @@
 * envlookup
 
+[[https://travis-ci.org/thepatrik/envlookup][https://travis-ci.org/thepatrik/envlookup.svg?branch=master]]
+
 Small lib to avoid boiler plate code around environment variables.
 
 ** Usage
