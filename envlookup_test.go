@@ -328,7 +328,7 @@ func TestBoolStrParse(t *testing.T) {
 	if val {
 		t.Error("value should be false")
 	}
-	if err != envlookup.ErrFormat {
+	if err != envlookup.ErrParse {
 		t.Error("error should be nil")
 	}
 }
@@ -340,7 +340,7 @@ func TestIntEnvFormatErr(t *testing.T) {
 	if val == defval {
 		t.Error("default value should not be set", defval, val)
 	}
-	if err != envlookup.ErrFormat {
+	if err != envlookup.ErrParse {
 		t.Error("error should be nil")
 	}
 
@@ -348,7 +348,7 @@ func TestIntEnvFormatErr(t *testing.T) {
 	if val != 0 {
 		t.Error("zero should be set")
 	}
-	if err != envlookup.ErrFormat {
+	if err != envlookup.ErrParse {
 		t.Error("error should be nil")
 	}
 }
