@@ -1,0 +1,79 @@
+* envlookup
+
+Small lib to avoid boiler plate code around environment variables.
+
+** Usage
+
+#+BEGIN_EXAMPLE
+import "github.com/spider-pigs/envlookup"
+#+END_EXAMPLE
+
+Set some environment variables:
+#+BEGIN_EXAMPLE
+export JAZZ_ARTIST="John Coltrane"
+export PLAYED_WITH_MILES_DAVIES=true
+export NO_OF_STUDIO_ALBUMS="51"
+export RECORD_LABELS="Impulse!,Atlantic,Prestige,Blue Note"
+export LONGEST_RECORDED_TRACK="27m32s"
+#+END_EXAMPLE
+
+*** Get env
+
+Get an env var value. If the value does not exist, an error will be
+returned:
+
+#+BEGIN_EXAMPLE
+val, err := envlookup.String("JAZZ_ARTIST")
+#+END_EXAMPLE
+
+*** Get env or default value
+
+Get an env var value or a default value if it does not exist:
+#+BEGIN_EXAMPLE
+val, err := envlookup.String("JAZZ_SAXOPHONIST", "Wayne Shorter")
+#+END_EXAMPLE
+
+*** Get slice env
+
+To get values as a slice (comma-separated string):
+#+BEGIN_EXAMPLE
+val, err := envlookup.Slice("RECORD_LABELS")
+#+END_EXAMPLE
+
+*** Get bool env
+
+Boolean values are supported:
+#+BEGIN_EXAMPLE
+val, err := envlookup.Bool("PLAYED_WITH_MILES_DAVIES")
+#+END_EXAMPLE
+
+*** Get float or int env
+
+Get float (64 bit) or int envs:
+#+BEGIN_EXAMPLE
+val, err := envlookup.Int("NO_OF_STUDIO_ALBUMS")
+#+END_EXAMPLE
+
+*** Get duration env
+
+To get a duration value:
+#+BEGIN_EXAMPLE
+val, err := envlookup.Duration("LONGEST_RECORDED_TRACK")
+#+END_EXAMPLE
+
+*** Errors
+If an env var is not set the returned value will be empty and an error will be returned:
+#+BEGIN_EXAMPLE
+val, err := envlookup.Duration("COUNTRY_ARTIST")
+if err == envlookup.ErrNotFound {
+    panic(err)
+}
+#+END_EXAMPLE
+
+If an env var can not be parsed as the expected return type, an error will be returned:
+#+BEGIN_EXAMPLE
+val, err := envlookup.Duration("LONGEST_RECORDED_TRACK")
+if err == envlookup.ErrParse {
+    panic(err)
+}
+#+END_EXAMPLE
