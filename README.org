@@ -1,6 +1,6 @@
 * envlookup
 
-[[https://travis-ci.org/thepatrik/envlookup][https://travis-ci.org/thepatrik/envlookup.svg?branch=master]]
+[![Build Status](https://travis-ci.org/spider-pigs/envlookup.svg?branch=master)](https://travis-ci.org/spider-pigs/envlookup)
 
 Small lib to avoid boiler plate code around environment variables.
 
