@@ -37,10 +37,10 @@ func unsetVars() {
 func TestEnv(t *testing.T) {
 	val, err := envlookup.String("JAZZ_ARTIST")
 	if len(val) == 0 {
-		t.Error("value should not be empty")
+		t.Error("value should not be empty", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
@@ -48,20 +48,20 @@ func TestEnvWithDef(t *testing.T) {
 	defval := "Wayne Shorter"
 	val, err := envlookup.String("JAZZ_ARTIST", defval)
 	if val == defval {
-		t.Error("default value should not be set")
+		t.Error("default value should not be set", defval, val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestEmptyEnv(t *testing.T) {
 	val, err := envlookup.String("EMPTY_JAZZ_ARTIST")
 	if len(val) != 0 {
-		t.Error("value should be empty")
+		t.Error("value should be empty", val)
 	}
 	if err != envlookup.ErrNotFound {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
@@ -69,20 +69,20 @@ func TestEmptyEnvWithDef(t *testing.T) {
 	defval := "Wayne Shorter"
 	val, err := envlookup.String("EMPTY_JAZZ_ARTIST", defval)
 	if val != defval {
-		t.Error("default value should be set")
+		t.Error("default value should be set", defval, val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+	if err != nil {
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestSliceEnv(t *testing.T) {
 	val, err := envlookup.Slice("RECORD_LABELS")
 	if len(val) == 0 {
-		t.Error("value should not be empty")
+		t.Error("value should not be empty", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
@@ -91,20 +91,20 @@ func TestSliceEnvWithDef(t *testing.T) {
 	val, err := envlookup.Slice("RECORD_LABELS", defval)
 
 	if reflect.DeepEqual(val, defval) {
-		t.Error("default value should not be set")
+		t.Error("default value should not be set", defval, val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestEmptySliceEnv(t *testing.T) {
 	val, err := envlookup.Slice("EMPTY_RECORD_LABELS")
 	if len(val) != 0 {
-		t.Error("value should be empty")
+		t.Error("value should be empty", val)
 	}
 	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+		t.Error("error should be envlookup.ErrNotFound", err)
 	}
 }
 
@@ -113,20 +113,20 @@ func TestEmptySliceEnvWithDef(t *testing.T) {
 	val, err := envlookup.Slice("EMPTY_RECORD_LABELS", defval)
 
 	if !reflect.DeepEqual(val, defval) {
-		t.Error("default value should be set")
+		t.Error("default value should be set", defval, val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound", err)
+	if err != nil {
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestIntEnv(t *testing.T) {
 	val, err := envlookup.Int("NO_OF_STUDIO_ALBUMS")
 	if val == 0 {
-		t.Error("value should not be zero")
+		t.Error("value should not be zero", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
@@ -134,20 +134,20 @@ func TestIntEnvOrDef(t *testing.T) {
 	defval := 1
 	val, err := envlookup.Int("NO_OF_STUDIO_ALBUMS", defval)
 	if val == defval {
-		t.Error("default value should not be set")
+		t.Error("default value should not be set", defval, val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestEmptyIntEnv(t *testing.T) {
 	val, err := envlookup.Int("EMPTY_NO_OF_STUDIO_ALBUMS")
 	if val != 0 {
-		t.Error("value should be zero")
+		t.Error("value should be zero", val)
 	}
 	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+		t.Error("error should be envlookup.ErrNotFound", err)
 	}
 }
 
@@ -155,20 +155,20 @@ func TestEmptyIntEnvOrDef(t *testing.T) {
 	defval := 51
 	val, err := envlookup.Int("EMPTY_NO_OF_STUDIO_ALBUMS", defval)
 	if val != defval {
-		t.Error("default value should be set")
+		t.Error("default value should be set", defval, val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+	if err != nil {
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestFloat64Env(t *testing.T) {
 	val, err := envlookup.Float64("LONGEST_RECORDED_TRACK_FLOAT")
 	if val == 0 {
-		t.Error("value should not be zero")
+		t.Error("value should not be zero", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
@@ -176,20 +176,20 @@ func TestFloat64EnvOrDef(t *testing.T) {
 	defval := 4.43
 	val, err := envlookup.Float64("LONGEST_RECORDED_TRACK_FLOAT", defval)
 	if val == defval {
-		t.Error("default value should not be set")
+		t.Error("default value should not be set", defval, val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestEmptyFloat64Env(t *testing.T) {
 	val, err := envlookup.Float64("EMPTY_LONGEST_RECORDED_TRACK_FLOAT")
 	if val != 0 {
-		t.Error("value should be zero")
+		t.Error("value should be zero", val)
 	}
 	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+		t.Error("error should be envlookup.ErrNotFound", err)
 	}
 }
 
@@ -197,20 +197,20 @@ func TestEmptyFloat64EnvOrDef(t *testing.T) {
 	defval := 4.43
 	val, err := envlookup.Float64("EMPTY_LONGEST_RECORDED_TRACK_FLOAT", defval)
 	if val != defval {
-		t.Error("default value should be set")
+		t.Error("default value should be set", defval, val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+	if err != nil {
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestDurationEnv(t *testing.T) {
 	val, err := envlookup.Duration("LONGEST_RECORDED_TRACK")
 	if val == 0 {
-		t.Error("value should not be 0")
+		t.Error("value should not be 0", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
@@ -218,20 +218,20 @@ func TestDurationEnvOrDef(t *testing.T) {
 	defval, _ := time.ParseDuration("10h2m")
 	val, err := envlookup.Duration("LONGEST_RECORDED_TRACK", defval)
 	if val == defval {
-		t.Error("default value should not be set")
+		t.Error("default value should not be set", defval, val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestEmptyDurationEnv(t *testing.T) {
 	val, err := envlookup.Duration("EMPTY_LONGEST_RECORDED_TRACK")
 	if val != 0 {
-		t.Error("value should be false")
+		t.Error("value should be false", val)
 	}
 	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+		t.Error("error should be envlookup.ErrNotFound", err)
 	}
 }
 
@@ -239,20 +239,20 @@ func TestEmptyDurationEnvOrDef(t *testing.T) {
 	defval, _ := time.ParseDuration("10h2m")
 	val, err := envlookup.Duration("EMPTY_LONGEST_RECORDED_TRACK", defval)
 	if val != defval {
-		t.Error("default value should be set")
+		t.Error("default value should be set", defval, val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+	if err != nil {
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestBoolEnv(t *testing.T) {
 	val, err := envlookup.Bool("PLAYED_WITH_MILES_DAVIES")
 	if !val {
-		t.Error("value should be true")
+		t.Error("value should be true", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
@@ -260,20 +260,20 @@ func TestBoolEnvOrDef(t *testing.T) {
 	defval := false
 	val, err := envlookup.Bool("PLAYED_WITH_MILES_DAVIES", defval)
 	if val == defval {
-		t.Error("default value should not be set")
+		t.Error("default value should not be set", defval, val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestEmptyBoolEnv(t *testing.T) {
 	val, err := envlookup.Bool("EMPTY_PLAYED_WITH_MILES_DAVIES")
 	if val {
-		t.Error("value should be false")
+		t.Error("value should be false", val)
 	}
 	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+		t.Error("error should be envlookup.ErrNotFound", err)
 	}
 }
 
@@ -281,56 +281,56 @@ func TestEmptyBoolEnvOrDef(t *testing.T) {
 	defval := true
 	val, err := envlookup.Bool("EMPTY_PLAYED_WITH_MILES_DAVIES", defval)
 	if val != defval {
-		t.Error("default value should be set")
+		t.Error("default value should be set", defval, val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound")
+	if err != nil {
+		t.Error("error should be nil", err)
 	}
 }
 
 func TestBoolStrParse(t *testing.T) {
 	val, err := envlookup.Bool("PLAYED_WITH_MILES_DAVIES")
 	if !val {
-		t.Error("value should be true")
+		t.Error("value should be true", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 
 	os.Setenv("PLAYED_WITH_MILES_DAVIES", "1")
 	val, err = envlookup.Bool("PLAYED_WITH_MILES_DAVIES")
 	if !val {
-		t.Error("value should be true")
+		t.Error("value should be true", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 
 	os.Setenv("PLAYED_WITH_MILES_DAVIES", "false")
 	val, err = envlookup.Bool("PLAYED_WITH_MILES_DAVIES")
 	if val {
-		t.Error("value should be false")
+		t.Error("value should be false", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 
 	os.Setenv("PLAYED_WITH_MILES_DAVIES", "0")
 	val, err = envlookup.Bool("PLAYED_WITH_MILES_DAVIES")
 	if val {
-		t.Error("value should be false")
+		t.Error("value should be false", val)
 	}
 	if err != nil {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 
 	os.Setenv("PLAYED_WITH_MILES_DAVIES", "f")
 	val, err = envlookup.Bool("PLAYED_WITH_MILES_DAVIES")
 	if val {
-		t.Error("value should be false")
+		t.Error("value should be false", val)
 	}
 	if err != envlookup.ErrParse {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
 
@@ -342,14 +342,14 @@ func TestIntEnvFormatErr(t *testing.T) {
 		t.Error("default value should not be set", defval, val)
 	}
 	if err != envlookup.ErrParse {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 
 	val, err = envlookup.Int("NO_OF_STUDIO_ALBUMS")
 	if val != 0 {
-		t.Error("zero should be set")
+		t.Error("zero should be set", val)
 	}
 	if err != envlookup.ErrParse {
-		t.Error("error should be nil")
+		t.Error("error should be nil", err)
 	}
 }
