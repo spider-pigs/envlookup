@@ -1,6 +1,6 @@
 * envlookup
 
-[![Build Status](https://travis-ci.org/spider-pigs/envlookup.svg?branch=master)](https://travis-ci.org/spider-pigs/envlookup)
+[[https://travis-ci.org/spider-pigs/envlookup][https://travis-ci.org/spider-pigs/envlookup.svg?branch=master]]
 
 Small lib to avoid boiler plate code around environment variables.
 
@@ -68,7 +68,7 @@ If an env var is not set the returned value will be empty and an error will be r
 #+BEGIN_EXAMPLE
 val, err := envlookup.Duration("COUNTRY_ARTIST")
 if err == envlookup.ErrNotFound {
-    panic(err)
+    ...
 }
 #+END_EXAMPLE
 
@@ -76,6 +76,6 @@ If an env var can not be parsed as the expected return type, an error will be re
 #+BEGIN_EXAMPLE
 val, err := envlookup.Duration("LONGEST_RECORDED_TRACK")
 if err == envlookup.ErrParse {
-    panic(err)
+    ...
 }
 #+END_EXAMPLE
