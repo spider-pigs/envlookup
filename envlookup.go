@@ -10,13 +10,12 @@ import (
 
 const separator = ","
 
-var (
-	// ErrNotFound error
-	ErrNotFound = errors.New("Variable not found")
+// ErrNotFound indicates that an environment variable was not found.
+var ErrNotFound = errors.New("environment variable not found")
 
-	// ErrParse error
-	ErrParse = errors.New("Parse error")
-)
+// ErrParse indicates that an environment variable could not be parsed
+// to the desired type.
+var ErrParse = errors.New("parse error")
 
 // String retrieves the value of the environment variable named
 // by the key. If the variable is present in the environment the
