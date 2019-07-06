@@ -71,7 +71,7 @@ If an env var is not set (and there is no default value set), a NotFoundError wi
 val, err := envlookup.Duration("COUNTRY_ARTIST")
 if _, ok := err.(*envlookup.NotFoundError); ok {
     log.Println(err)
-    # could not find environment variable "COUNTRY_ARTIST"
+    // could not find environment variable "COUNTRY_ARTIST"
     ...
 }
 #+END_EXAMPLE
@@ -81,7 +81,7 @@ If an env var can not be parsed as the expected return type, a ParseError will b
 val, err := envlookup.Float64("LONGEST_RECORDED_TRACK")
 if _, ok := err.(*envlookup.ParseError); ok {
     log.Println(err)
-    # could not parse environment variable "LONGEST_RECORDED_TRACK": strconv.ParseFloat: parsing "27m32s": invalid syntax
+    // could not parse environment variable "LONGEST_RECORDED_TRACK": strconv.ParseFloat: parsing "27m32s": invalid syntax
     ...
 }
 #+END_EXAMPLE
