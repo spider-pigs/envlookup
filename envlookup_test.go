@@ -60,8 +60,8 @@ func TestEmptyEnv(t *testing.T) {
 	if len(val) != 0 {
 		t.Error("value should be empty", val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be nil", err)
+	if _, ok := err.(*envlookup.NotFoundError); !ok {
+		t.Error("error should be envlookup.NotFoundError", err)
 	}
 }
 
@@ -103,8 +103,8 @@ func TestEmptySliceEnv(t *testing.T) {
 	if len(val) != 0 {
 		t.Error("value should be empty", val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound", err)
+	if _, ok := err.(*envlookup.NotFoundError); !ok {
+		t.Error("error should be envlookup.NotFoundError", err)
 	}
 }
 
@@ -146,8 +146,8 @@ func TestEmptyIntEnv(t *testing.T) {
 	if val != 0 {
 		t.Error("value should be zero", val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound", err)
+	if _, ok := err.(*envlookup.NotFoundError); !ok {
+		t.Error("error should be envlookup.NotFoundError", err)
 	}
 }
 
@@ -183,13 +183,20 @@ func TestFloat64EnvOrDef(t *testing.T) {
 	}
 }
 
+func TestFloat64ParseErr(t *testing.T) {
+	_, err := envlookup.Float64("LONGEST_RECORDED_TRACK")
+	if _, ok := err.(*envlookup.ParseError); !ok {
+		t.Error("error should be envlookup.ParseError", err)
+	}
+}
+
 func TestEmptyFloat64Env(t *testing.T) {
 	val, err := envlookup.Float64("EMPTY_LONGEST_RECORDED_TRACK_FLOAT")
 	if val != 0 {
 		t.Error("value should be zero", val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound", err)
+	if _, ok := err.(*envlookup.NotFoundError); !ok {
+		t.Error("error should be envlookup.NotFoundError", err)
 	}
 }
 
@@ -230,8 +237,8 @@ func TestEmptyDurationEnv(t *testing.T) {
 	if val != 0 {
 		t.Error("value should be false", val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound", err)
+	if _, ok := err.(*envlookup.NotFoundError); !ok {
+		t.Error("error should be envlookup.NotFoundError", err)
 	}
 }
 
@@ -272,8 +279,8 @@ func TestEmptyBoolEnv(t *testing.T) {
 	if val {
 		t.Error("value should be false", val)
 	}
-	if err != envlookup.ErrNotFound {
-		t.Error("error should be envlookup.ErrNotFound", err)
+	if _, ok := err.(*envlookup.NotFoundError); !ok {
+		t.Error("error should be envlookup.NotFoundError", err)
 	}
 }
 
@@ -329,8 +336,8 @@ func TestBoolStrParse(t *testing.T) {
 	if val {
 		t.Error("value should be false", val)
 	}
-	if err != envlookup.ErrParse {
-		t.Error("error should be nil", err)
+	if _, ok := err.(*envlookup.ParseError); !ok {
+		t.Error("error should be envlookup.ParseError", err)
 	}
 }
 
@@ -341,15 +348,15 @@ func TestIntEnvFormatErr(t *testing.T) {
 	if val == defval {
 		t.Error("default value should not be set", defval, val)
 	}
-	if err != envlookup.ErrParse {
-		t.Error("error should be nil", err)
+	if _, ok := err.(*envlookup.ParseError); !ok {
+		t.Error("error should be envlookup.ParseError", err)
 	}
 
 	val, err = envlookup.Int("NO_OF_STUDIO_ALBUMS")
 	if val != 0 {
 		t.Error("zero should be set", val)
 	}
-	if err != envlookup.ErrParse {
-		t.Error("error should be nil", err)
+	if _, ok := err.(*envlookup.ParseError); !ok {
+		t.Error("error should be envlookup.ParseError", err)
 	}
 }

@@ -2,6 +2,7 @@ package envlookup
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -10,20 +11,32 @@ import (
 
 const separator = ","
 
-// ErrNotFound indicates that an environment variable was not found.
-var ErrNotFound = errors.New("environment variable not found")
+// NotFoundError indicates that an environment variable was not found.
+type NotFoundError struct {
+	Var string
+}
 
-// ErrParse indicates that an environment variable could not be parsed
-// to the desired type.
-var ErrParse = errors.New("parse error")
+func (e *NotFoundError) Error() string {
+	return fmt.Sprintf("could not find environment variable \"%s\"", e.Var)
+}
 
-// String retrieves the value of the environment variable named
-// by the key. If the variable is present in the environment the
-// value (which may be empty) is returned and the error is nil.
-// If the variable is not present but a default value is supplied,
-// that value will be returned. If the env var could could not be
-// parsed as a string, ErrParse will be returned. Otherwise the
-// returned value will be empty and an ErrNotFound will be returned.
+// ParseError indicates that an environment variable could not be
+// parsed to the desired type.
+type ParseError struct {
+	Var string
+	Err error
+}
+
+func (e *ParseError) Error() string {
+	return fmt.Sprintf("could not parse environment variable \"%s\": %s", e.Var, e.Err)
+}
+
+// String retrieves the value of the environment variable named by the
+// key. If the variable is present in the environment the value (which
+// may be empty) is returned and the error is nil. If the variable is
+// not present but a default value is supplied, that value will be
+// returned. Otherwise the returned value will be empty and
+// NotFoundError will be returned.
 func String(key string, def ...string) (string, error) {
 	v, exists := os.LookupEnv(key)
 	if !exists {
@@ -31,18 +44,18 @@ func String(key string, def ...string) (string, error) {
 			return def[0], nil
 		}
 		var res string
-		return res, ErrNotFound
+		err := &NotFoundError{key}
+		return res, err
 	}
 	return v, nil
 }
 
-// Slice retrieves the value of the environment variable named
-// by the key. If the variable is present in the environment the
-// value (which may be empty) is returned and the error is nil.
-// If the variable is not present but a default value is supplied,
-// that value will be returned. If the env var could could not be
-// parsed as a string slice, ErrParse will be returned. Otherwise the
-// returned value will be empty and an ErrNotFound will be returned.
+// Slice retrieves the value of the environment variable named by the
+// key. If the variable is present in the environment the value (which
+// may be empty) is returned and the error is nil. If the variable is
+// not present but a default value is supplied, that value will be
+// returned. Otherwise the returned value will be empty and
+// NotFoundError will be returned.
 func Slice(key string, def ...[]string) ([]string, error) {
 	v, exists := os.LookupEnv(key)
 	if !exists {
@@ -50,7 +63,8 @@ func Slice(key string, def ...[]string) ([]string, error) {
 			return def[0], nil
 		}
 		var res []string
-		return res, ErrNotFound
+		err := &NotFoundError{key}
+		return res, err
 	}
 
 	split := strings.Split(v, separator)
@@ -58,13 +72,13 @@ func Slice(key string, def ...[]string) ([]string, error) {
 	return split, nil
 }
 
-// Int retrieves the value of the environment variable named
-// by the key. If the variable is present in the environment the
-// value (which may be empty) is returned and the error is nil.
-// If the variable is not present but a default value is supplied,
-// that value will be returned. If the env var could could not be
-// parsed as an int value, ErrParse will be returned. Otherwise the
-// returned value will be empty and an ErrNotFound will be returned.
+// Int retrieves the value of the environment variable named by the
+// key. If the variable is present in the environment the value (which
+// may be empty) is returned and the error is nil. If the variable is
+// not present but a default value is supplied, that value will be
+// returned. If the env var could could not be parsed as an int value,
+// ParseError will be returned. Otherwise the returned value will be
+// empty and NotFoundError will be returned.
 func Int(key string, def ...int) (int, error) {
 	v, exists := os.LookupEnv(key)
 	if !exists {
@@ -72,23 +86,26 @@ func Int(key string, def ...int) (int, error) {
 			return def[0], nil
 		}
 		var res int
-		return res, ErrNotFound
+		err := &NotFoundError{key}
+		return res, err
 	}
 
 	i, err := strconv.Atoi(v)
 	if err != nil {
-		return 0, ErrParse
+		var res int
+		err := &ParseError{key, err}
+		return res, err
 	}
 	return i, nil
 }
 
-// Bool retrieves the value of the environment variable named
-// by the key. If the variable is present in the environment the
-// value (which may be empty) is returned and the error is nil.
-// If the variable is not present but a default value is supplied,
-// that value will be returned. If the env var could could not be
-// parsed as a bool value, ErrParse will be returned. Otherwise the
-// returned value will be empty and an ErrNotFound will be returned.
+// Bool retrieves the value of the environment variable named by the
+// key. If the variable is present in the environment the value (which
+// may be empty) is returned and the error is nil. If the variable is
+// not present but a default value is supplied, that value will be
+// returned. If the env var could could not be parsed as a bool value,
+// ParseError will be returned. Otherwise the returned value will be
+// empty and NotFoundError will be returned.
 func Bool(key string, def ...bool) (bool, error) {
 	v, exists := os.LookupEnv(key)
 	if !exists {
@@ -96,20 +113,26 @@ func Bool(key string, def ...bool) (bool, error) {
 			return def[0], nil
 		}
 		var res bool
-		return res, ErrNotFound
+		err := &NotFoundError{key}
+		return res, err
 	}
 
-	return strToBool(v)
+	b, err := strToBool(v)
+	if err != nil {
+		var res bool
+		err := &ParseError{key, err}
+		return res, err
+	}
+	return b, nil
 }
 
-// Duration retrieves the value of the environment variable named
-// by the key. If the variable is present in the environment the
-// value (which may be empty) is returned and the error is nil.
-// If the variable is not present but a default value is supplied,
-// that value will be returned. If the env var could could not be
-// parsed as a time.Duration value, ErrParse will be returned.
-// Otherwise the returned value will be empty and an ErrNotFound
-// will be returned.
+// Duration retrieves the value of the environment variable named by
+// the key. If the variable is present in the environment the value
+// (which may be empty) is returned and the error is nil. If the
+// variable is not present but a default value is supplied, that value
+// will be returned. If the env var could could not be parsed as a
+// time.Duration value, ParseError will be returned. Otherwise the
+// returned value will be empty and NotFoundError will be returned.
 func Duration(key string, def ...time.Duration) (time.Duration, error) {
 	v, exists := os.LookupEnv(key)
 	if !exists {
@@ -117,22 +140,25 @@ func Duration(key string, def ...time.Duration) (time.Duration, error) {
 			return def[0], nil
 		}
 		var res time.Duration
-		return res, ErrNotFound
+		err := &NotFoundError{key}
+		return res, err
 	}
 	d, err := time.ParseDuration(v)
 	if err != nil {
-		return 0, ErrParse
+		var res time.Duration
+		err := &ParseError{key, err}
+		return res, err
 	}
 	return d, nil
 }
 
-// Float64 retrieves the value of the environment variable named
-// by the key. If the variable is present in the environment the
-// value (which may be empty) is returned and the error is nil.
-// If the variable is not present but a default value is supplied,
-// that value will be returned. If the env var could could not be
-// parsed as a float64, ErrParse will be returned. Otherwise the
-// returned value will be empty and an ErrNotFound will be returned.
+// Float64 retrieves the value of the environment variable named by the
+// key. If the variable is present in the environment the value (which
+// may be empty) is returned and the error is nil. If the variable is
+// not present but a default value is supplied, that value will be
+// returned. If the env var could could not be parsed as a float64,
+// ParseError will be returned. Otherwise the returned value will be
+// empty and NotFoundError will be returned.
 func Float64(key string, def ...float64) (float64, error) {
 	v, exists := os.LookupEnv(key)
 	if !exists {
@@ -140,12 +166,15 @@ func Float64(key string, def ...float64) (float64, error) {
 			return def[0], nil
 		}
 		var res float64
-		return res, ErrNotFound
+		err := &NotFoundError{key}
+		return res, err
 	}
 
 	f, err := strconv.ParseFloat(v, 64)
 	if err != nil {
-		return 0, ErrParse
+		var res float64
+		err := &ParseError{key, err}
+		return res, err
 	}
 
 	return f, nil
@@ -162,6 +191,9 @@ func strToBool(v string) (bool, error) {
 	case "1":
 		return true, nil
 	default:
-		return false, ErrParse
+		var res bool
+		errStr := fmt.Sprintf("\"%s\" is not parseable as bool value", v)
+		err := errors.New(errStr)
+		return res, err
 	}
 }
