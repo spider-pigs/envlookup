@@ -27,58 +27,64 @@ Get an env var value. If the value does not exist, an error will be
 returned:
 
 #+BEGIN_EXAMPLE
-val, err := envlookup.String("JAZZ_ARTIST")
+s, err := envlookup.String("JAZZ_ARTIST")
 #+END_EXAMPLE
 
 *** Get env or default value
 
 Get an env var value or a default value if it does not exist:
 #+BEGIN_EXAMPLE
-val, err := envlookup.String("JAZZ_SAXOPHONIST", "Wayne Shorter")
+s, err := envlookup.String("JAZZ_SAXOPHONIST", "Wayne Shorter")
+#+END_EXAMPLE
+
+*** Get mandatory env
+There are must helper functions for mandatory env vars (panics if err is non-nil):
+#+BEGIN_EXAMPLE
+s := envlookup.MustString(envlookup.String("JAZZ_SAXOPHONIST"))
 #+END_EXAMPLE
 
 *** Get slice env
 
 To get values as a slice (comma-separated string):
 #+BEGIN_EXAMPLE
-val, err := envlookup.Slice("RECORD_LABELS")
+s, err := envlookup.Slice("RECORD_LABELS")
 #+END_EXAMPLE
 
 *** Get bool env
 
 Boolean values are supported:
 #+BEGIN_EXAMPLE
-val, err := envlookup.Bool("PLAYED_WITH_MILES_DAVIES")
+b, err := envlookup.Bool("PLAYED_WITH_MILES_DAVIES")
 #+END_EXAMPLE
 
 *** Get float or int env
 
 Get float (64 bit) or int envs:
 #+BEGIN_EXAMPLE
-val, err := envlookup.Int("NO_OF_STUDIO_ALBUMS")
+i, err := envlookup.Int("NO_OF_STUDIO_ALBUMS")
 #+END_EXAMPLE
 
 *** Get duration env
 
 To get a duration value:
 #+BEGIN_EXAMPLE
-val, err := envlookup.Duration("LONGEST_RECORDED_TRACK")
+d, err := envlookup.Duration("LONGEST_RECORDED_TRACK")
 #+END_EXAMPLE
 
 *** Errors
 If an env var is not set (and there is no default value set), a NotFoundError will be returned:
 #+BEGIN_EXAMPLE
-val, err := envlookup.Duration("COUNTRY_ARTIST")
+d, err := envlookup.Duration("LONGEST_ALBUM")
 if _, ok := err.(*envlookup.NotFoundError); ok {
     log.Println(err)
-    // could not find environment variable "COUNTRY_ARTIST"
+    // could not find environment variable "LONGEST_ALBUM"
     ...
 }
 #+END_EXAMPLE
 
 If an env var can not be parsed as the expected return type, a ParseError will be returned:
 #+BEGIN_EXAMPLE
-val, err := envlookup.Float64("LONGEST_RECORDED_TRACK")
+f, err := envlookup.Float64("LONGEST_RECORDED_TRACK")
 if _, ok := err.(*envlookup.ParseError); ok {
     log.Println(err)
     // could not parse environment variable "LONGEST_RECORDED_TRACK": strconv.ParseFloat: parsing "27m32s": invalid syntax
