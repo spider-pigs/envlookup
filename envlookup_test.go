@@ -343,6 +343,7 @@ func TestBoolStrParse(t *testing.T) {
 
 func TestIntEnvFormatErr(t *testing.T) {
 	os.Setenv("NO_OF_STUDIO_ALBUMS", "ABC")
+	defer setVars()
 	defval := 1
 	val, err := envlookup.Int("NO_OF_STUDIO_ALBUMS", defval)
 	if val == defval {
