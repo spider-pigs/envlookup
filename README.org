@@ -1,6 +1,6 @@
 * envlookup
 
-[[https://travis-ci.org/spider-pigs/envlookup][https://travis-ci.org/spider-pigs/envlookup.svg?branch=master]] [[https://www.codacy.com/app/spider-pigs/envlookup?utm_source=github.com&utm_medium=referral&utm_content=spider-pigs/envlookup&utm_campaign=Badge_Grade][https://api.codacy.com/project/badge/Grade/016b19403fbd4e96b53f85ca18153146?.svg]] [[https://godoc.org/github.com/spider-pigs/envlookup][https://godoc.org/github.com/spider-pigs/envlookup?status.svg]]
+[[https://travis-ci.org/spider-pigs/envlookup][https://travis-ci.org/spider-pigs/envlookup.svg?branch=master]] [[https://goreportcard.com/report/github.com/spider-pigs/envlookup][https://goreportcard.com/badge/github.com/spider-pigs/envlookup?.svg]] [[https://www.codacy.com/app/spider-pigs/envlookup?utm_source=github.com&utm_medium=referral&utm_content=spider-pigs/envlookup&utm_campaign=Badge_Grade][https://api.codacy.com/project/badge/Grade/016b19403fbd4e96b53f85ca18153146?.svg]] [[https://godoc.org/github.com/spider-pigs/envlookup][https://godoc.org/github.com/spider-pigs/envlookup?status.svg]]
 
 Small lib to avoid boiler plate code around environment variables.
 
