@@ -67,3 +67,14 @@ func MustString(s string, err error) string {
 	}
 	return s
 }
+
+// MustUint64 is a helper that wraps a call to a function returning
+// (uint64, error) and panics if the error is non-nil. It is intended
+// for use such as
+//	u := envlookup.MustUint64(envlookup.Uint64("key"))
+func MustUint64(u uint64, err error) uint64 {
+	if err != nil {
+		panic(err)
+	}
+	return u
+}

@@ -20,6 +20,7 @@ func setVars() {
 	os.Setenv("JAZZ_ARTIST", "John Coltrane")
 	os.Setenv("PLAYED_WITH_MILES_DAVIES", "true")
 	os.Setenv("NO_OF_STUDIO_ALBUMS", "51")
+	os.Setenv("NO_OF_UNSIGNED_STUDIO_ALBUMS", "73")
 	os.Setenv("RECORD_LABELS", "Impulse!,Atlantic,Prestige,Blue Note")
 	os.Setenv("LONGEST_RECORDED_TRACK", "27m32s")
 	os.Setenv("LONGEST_RECORDED_TRACK_FLOAT", "27.32")
@@ -29,6 +30,7 @@ func unsetVars() {
 	os.Unsetenv("JAZZ_ARTIST")
 	os.Unsetenv("PLAYED_WITH_MILES_DAVIES")
 	os.Unsetenv("NO_OF_STUDIO_ALBUMS")
+	os.Unsetenv("NO_OF_UNSIGNED_STUDIO_ALBUMS")
 	os.Unsetenv("RECORD_LABELS")
 	os.Unsetenv("LONGEST_RECORDED_TRACK")
 	os.Unsetenv("LONGEST_RECORDED_TRACK_FLOAT")
@@ -359,5 +361,47 @@ func TestIntEnvFormatErr(t *testing.T) {
 	}
 	if _, ok := err.(*envlookup.ParseError); !ok {
 		t.Error("error should be envlookup.ParseError", err)
+	}
+}
+
+func TestUint64Env(t *testing.T) {
+	val, err := envlookup.Uint64("NO_OF_UNSIGNED_STUDIO_ALBUMS")
+	if val == 0 {
+		t.Error("value should not be zero", val)
+	}
+	if err != nil {
+		t.Error("error should be nil", err)
+	}
+}
+
+func TestUint64EnvOrDef(t *testing.T) {
+	defval := uint64(1)
+	val, err := envlookup.Uint64("NO_OF_UNSIGNED_STUDIO_ALBUMS", defval)
+	if val == defval {
+		t.Error("default value should not be set", defval, val)
+	}
+	if err != nil {
+		t.Error("error should be nil", err)
+	}
+}
+
+func TestEmptyUnit64Env(t *testing.T) {
+	val, err := envlookup.Uint64("EMPTY_NO_OF_STUDIO_ALBUMS")
+	if val != 0 {
+		t.Error("value should be zero", val)
+	}
+	if _, ok := err.(*envlookup.NotFoundError); !ok {
+		t.Error("error should be envlookup.NotFoundError", err)
+	}
+}
+
+func TestEmptyUint64EnvOrDef(t *testing.T) {
+	defval := uint64(51)
+	val, err := envlookup.Uint64("EMPTY_NO_OF_STUDIO_ALBUMS", defval)
+	if val != defval {
+		t.Error("default value should be set", defval, val)
+	}
+	if err != nil {
+		t.Error("error should be nil", err)
 	}
 }

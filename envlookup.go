@@ -180,6 +180,33 @@ func Float64(key string, def ...float64) (float64, error) {
 	return f, nil
 }
 
+// Uint64 retrieves the value of the environment variable named by the
+// key. If the variable is present in the environment the value (which
+// may be empty) is returned and the error is nil. If the variable is
+// not present but a default value is supplied, that value will be
+// returned. Otherwise the returned value will be empty and
+// NotFoundError will be returned.
+func Uint64(key string, def ...uint64) (uint64, error) {
+	v, exists := os.LookupEnv(key)
+	if !exists {
+		if len(def) > 0 {
+			return def[0], nil
+		}
+		var res uint64
+		err := &NotFoundError{key}
+		return res, err
+	}
+
+	u, err := strconv.ParseUint(v, 0, 64)
+	if err != nil {
+		var res uint64
+		err := &ParseError{key, err}
+		return res, err
+	}
+
+	return u, nil
+}
+
 func strToBool(v string) (bool, error) {
 	switch strings.ToLower(v) {
 	case "false":
