@@ -142,3 +142,26 @@ func TestMustStringPanic(t *testing.T) {
 
 	envlookup.MustString(envlookup.String("PANIC_PLEASE"))
 }
+
+func TestMustUint64(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("Function call should not panic")
+		}
+	}()
+
+	u := envlookup.MustUint64(envlookup.Uint64("NO_OF_UNSIGNED_STUDIO_ALBUMS"))
+	if u == 0 {
+		t.Error("value should be returned", u)
+	}
+}
+
+func TestMustUint64Panic(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("Function call should panic")
+		}
+	}()
+
+	envlookup.MustUint64(envlookup.Uint64("PANIC_PLEASE"))
+}
