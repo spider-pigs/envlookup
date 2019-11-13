@@ -164,6 +164,48 @@ func TestEmptyIntEnvOrDef(t *testing.T) {
 	}
 }
 
+func TestInt64Env(t *testing.T) {
+	val, err := envlookup.Int64("NO_OF_STUDIO_ALBUMS")
+	if val == 0 {
+		t.Error("value should not be zero", val)
+	}
+	if err != nil {
+		t.Error("error should be nil", err)
+	}
+}
+
+func TestInt64EnvOrDef(t *testing.T) {
+	defval := int64(1)
+	val, err := envlookup.Int64("NO_OF_STUDIO_ALBUMS", defval)
+	if val == defval {
+		t.Error("default value should not be set", defval, val)
+	}
+	if err != nil {
+		t.Error("error should be nil", err)
+	}
+}
+
+func TestEmptyInt64Env(t *testing.T) {
+	val, err := envlookup.Int64("EMPTY_NO_OF_STUDIO_ALBUMS")
+	if val != 0 {
+		t.Error("value should be zero", val)
+	}
+	if _, ok := err.(*envlookup.NotFoundError); !ok {
+		t.Error("error should be envlookup.NotFoundError", err)
+	}
+}
+
+func TestEmptyInt64EnvOrDef(t *testing.T) {
+	defval := int64(51)
+	val, err := envlookup.Int64("EMPTY_NO_OF_STUDIO_ALBUMS", defval)
+	if val != defval {
+		t.Error("default value should be set", defval, val)
+	}
+	if err != nil {
+		t.Error("error should be nil", err)
+	}
+}
+
 func TestFloat64Env(t *testing.T) {
 	val, err := envlookup.Float64("LONGEST_RECORDED_TRACK_FLOAT")
 	if val == 0 {
