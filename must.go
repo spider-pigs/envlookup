@@ -46,6 +46,17 @@ func MustInt(i int, err error) int {
 	return i
 }
 
+// MustInt64 is a helper that wraps a call to a function returning
+// (int64, error) and panics if the error is non-nil. It is intended for
+// use such as
+//	i := envlookup.MustInt64(envlookup.Int64("key"))
+func MustInt64(i int64, err error) int64 {
+	if err != nil {
+		panic(err)
+	}
+	return i
+}
+
 // MustSlice is a helper that wraps a call to a function returning
 // ([]string, error) and panics if the error is non-nil. It is intended
 // for use such as
