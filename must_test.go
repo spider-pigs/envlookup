@@ -97,6 +97,29 @@ func TestMustIntPanic(t *testing.T) {
 	envlookup.MustInt(envlookup.Int("PANIC_PLEASE"))
 }
 
+func TestMustInt64(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("Function call should not panic")
+		}
+	}()
+
+	i := envlookup.MustInt64(envlookup.Int64("NO_OF_STUDIO_ALBUMS"))
+	if i == 0 {
+		t.Error("value should not be zero", i)
+	}
+}
+
+func TestMustInt64Panic(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("Function call should panic")
+		}
+	}()
+
+	envlookup.MustInt64(envlookup.Int64("PANIC_PLEASE"))
+}
+
 func TestMustSlice(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
